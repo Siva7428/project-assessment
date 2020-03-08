@@ -1,0 +1,117 @@
+
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+
+<title>Spring Boot AngularJS example</title>
+<script type="text/javascript">
+angular.module('CustomerManagement', [])
+.controller('CustomerController', function($scope, $http) {
+	debugger
+	 $scope.customersList = [];
+	$scope.selectedAccount=null;
+	 $scope.selectedAccount = function() {
+		 $('.accountList').attr('style','display:none');
+		
+		  };
+
+     //Now load the data from server
+     _refreshCustomerData();
+     function _refreshCustomerData() {
+    	    $http({
+    	        method : 'GET',
+    	        url : 'http://localhost:8092/all/getAllCustomers'
+    	    }).then(function successCallback(response) {
+    	        $scope.customersList = response.data.customersList;
+    	        console.log("$scope.customersAccounts",$scope.customersList)
+    	    }, function errorCallback(response) {
+    	        console.log(response.statusText);
+    	    });
+    	}   
+	function myFunc(){
+		debugger
+		$scope.msg="hi"
+		
+	}
+    
+});
+ 
+           
+        </script>
+<style>
+
+table {
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	width: 50%;
+}
+
+caption {
+	text-align: left;
+	color: silver;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 5px;
+}
+
+th {
+	background: SteelBlue;
+	color: white;
+}
+
+tbody tr:nth-child(even) {
+	background: WhiteSmoke;
+}
+
+tbody tr td:nth-child(2) {
+	text-align: center;
+}
+
+tbody tr td:nth-child(3), tbody tr td:nth-child(4) {
+	text-align: center;
+	font-family: monospace;
+}
+
+tfoot {
+	background: SeaGreen;
+	color: white;
+	text-align: right;
+}
+
+tfoot tr th:last-child {
+	font-family: monospace;
+}
+
+td, th {
+	border: 1px solid gray;
+	width: 25%;
+	text-align: left;
+	padding: 5px 10px;
+}
+</style>
+<head>
+<body ng-app="CustomerManagement" ng-controller="CustomerController">
+	<h1>Customer Account Details</h1>
+	
+	<table class="accountList">
+		<tr>
+			<th>Account Number</th>
+			<th>Account Name</th>
+			<th>Account Type</th>
+			<th>Balance Date</th>
+			<th>Currency</th>
+			<th>Opening Balance</th>
+		</tr>
+
+		<tr ng-repeat="customerAccount in customersList" ng-click="selectedAccount()">
+			<td>{{ customerAccount.accountNumber }}</td>
+			<td>{{ customerAccount.accountName }}</td>
+			<td>{{ customerAccount.accountType }}</td>
+			<td>{{ customerAccount.balanceDate }}</td>
+			<td>{{ customerAccount.currency }}</td>
+			<td>{{ customerAccount.openingBal }}</td>
+			</tr>
+		
+	</table>
+</body>
+</html>
